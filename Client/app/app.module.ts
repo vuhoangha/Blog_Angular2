@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppComponent } from './app.component';
+import { SumaryPostComponent } from './sumary.post';
 import { TutorialComponent } from './tutorial.component';
 @NgModule({
   imports: [BrowserModule],
-  declarations: [AppComponent, TutorialComponent],
-  bootstrap: [AppComponent]
+  declarations: [SumaryPostComponent, TutorialComponent],
+  bootstrap: [SumaryPostComponent]
 })
 export class AppModule { }
