@@ -11,13 +11,46 @@ vuhoangha
     styles: ['h4 {color:blue;}']
 })
 export class SumaryPostComponent implements OnInit {
-    public listPost: any[];
-    constructor(private dataProvider: DataProvider) {
+    public dicPost: any[];
+    public dicCat: any[];
+    public dicActor: any[];
 
+    constructor(private dataProvider: DataProvider) {
     }
+
     ngOnInit() {
+        this.getAllActor();
+    }
+
+    getAllActor() {
         this.dataProvider.getAllActor().subscribe((response: any) => {
-            this.listPost = response;
+            if (response != null) {
+                const objResponse = JSON.parse(response);
+                if (Array.isArray(objResponse)) {
+                    
+                }
+            }
+            this.dicActor = response;
+            console.log(response);
+            this.getAllCategory();
+        }, error => {
+            console.error(error);
+        });
+    }
+
+    getAllCategory() {
+        this.dataProvider.getAllCategory().subscribe((response: any) => {
+            this.dicCat = response;
+            console.log(response);
+            this.getAllPost();
+        }, error => {
+            console.error(error);
+        });
+    }
+
+    getAllPost() {
+        this.dataProvider.getAllPost().subscribe((response: any) => {
+            this.dicPost = response;
             console.log(response);
         }, error => {
             console.error(error);

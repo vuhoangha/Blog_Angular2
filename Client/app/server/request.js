@@ -21,6 +21,27 @@ var DataProvider = (function () {
     DataProvider.prototype.getAllActor = function () {
         return this._http.get(this.urlActor).map(function (response) { return response.json(); });
     };
+    DataProvider.prototype.getAllCategory = function () {
+        return this._http.get(this.urlCategory).map(function (response) { return response.json(); });
+    };
+    DataProvider.prototype.getAllPost = function () {
+        return this._http.get(this.urlPost).map(function (response) { return response.json(); });
+    };
+    DataProvider.prototype.getPostById = function (postId) {
+        var key = { postId: postId };
+        var newUrl = this.urlPost + '?key=' + JSON.stringify(key);
+        return this._http.get(newUrl).map(function (response) { return response.json(); });
+    };
+    DataProvider.prototype.getActorById = function (actorId) {
+        var key = { acId: actorId };
+        var newUrl = this.urlActor + '?key=' + JSON.stringify(key);
+        return this._http.get(newUrl).map(function (response) { return response.json(); });
+    };
+    DataProvider.prototype.getCategoryById = function (catId) {
+        var key = { catId: catId };
+        var newUrl = this.urlCategory + '?key=' + JSON.stringify(key);
+        return this._http.get(newUrl).map(function (response) { return response.json(); });
+    };
     return DataProvider;
 }());
 DataProvider = __decorate([

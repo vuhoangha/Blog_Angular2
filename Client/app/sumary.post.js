@@ -15,9 +15,37 @@ var SumaryPostComponent = (function () {
         this.dataProvider = dataProvider;
     }
     SumaryPostComponent.prototype.ngOnInit = function () {
+        this.getAllActor();
+    };
+    SumaryPostComponent.prototype.getAllActor = function () {
         var _this = this;
         this.dataProvider.getAllActor().subscribe(function (response) {
-            _this.listPost = response;
+            if (response != null) {
+                var objResponse = JSON.parse(response);
+                if (Array.isArray(objResponse)) {
+                }
+            }
+            _this.dicActor = response;
+            console.log(response);
+            _this.getAllCategory();
+        }, function (error) {
+            console.error(error);
+        });
+    };
+    SumaryPostComponent.prototype.getAllCategory = function () {
+        var _this = this;
+        this.dataProvider.getAllCategory().subscribe(function (response) {
+            _this.dicCat = response;
+            console.log(response);
+            _this.getAllPost();
+        }, function (error) {
+            console.error(error);
+        });
+    };
+    SumaryPostComponent.prototype.getAllPost = function () {
+        var _this = this;
+        this.dataProvider.getAllPost().subscribe(function (response) {
+            _this.dicPost = response;
             console.log(response);
         }, function (error) {
             console.error(error);
