@@ -13,6 +13,9 @@ var request_1 = require("./server/request");
 var SumaryPostComponent = (function () {
     function SumaryPostComponent(dataProvider) {
         this.dataProvider = dataProvider;
+        this.listPost = [];
+        this.dicCat = {};
+        this.dicActor = {};
     }
     SumaryPostComponent.prototype.ngOnInit = function () {
         this.getAllActor();
@@ -21,12 +24,15 @@ var SumaryPostComponent = (function () {
         var _this = this;
         this.dataProvider.getAllActor().subscribe(function (response) {
             if (response != null) {
-                var objResponse = JSON.parse(response);
-                if (Array.isArray(objResponse)) {
+                if (Array.isArray(response)) {
+                    for (var _i = 0, response_1 = response; _i < response_1.length; _i++) {
+                        var actor = response_1[_i];
+                        var objActor = JSON.parse(actor);
+                        _this.dicActor[objActor.acId] = objActor;
+                    }
                 }
             }
-            _this.dicActor = response;
-            console.log(response);
+            console.log(_this.dicActor);
             _this.getAllCategory();
         }, function (error) {
             console.error(error);
@@ -35,8 +41,16 @@ var SumaryPostComponent = (function () {
     SumaryPostComponent.prototype.getAllCategory = function () {
         var _this = this;
         this.dataProvider.getAllCategory().subscribe(function (response) {
-            _this.dicCat = response;
-            console.log(response);
+            if (response != null) {
+                if (Array.isArray(response)) {
+                    for (var _i = 0, response_2 = response; _i < response_2.length; _i++) {
+                        var category = response_2[_i];
+                        var objActor = JSON.parse(category);
+                        _this.dicCat[objActor.catId] = objActor;
+                    }
+                }
+            }
+            console.log(_this.dicCat);
             _this.getAllPost();
         }, function (error) {
             console.error(error);
@@ -45,8 +59,33 @@ var SumaryPostComponent = (function () {
     SumaryPostComponent.prototype.getAllPost = function () {
         var _this = this;
         this.dataProvider.getAllPost().subscribe(function (response) {
-            _this.dicPost = response;
-            console.log(response);
+            if (response != null) {
+                console.log(response);
+                if (Array.isArray(response)) {
+                    for (var _i = 0, response_3 = response; _i < response_3.length; _i++) {
+                        var post = response_3[_i];
+                        console.log(post);
+                        var objActor = JSON.parse(post);
+                        console.log(objActor);
+                        var newObj = {
+                            postTitle: '',
+                            summary: '',
+                            acName: '',
+                            catName: ''
+                        };
+                        newObj.postTitle = objActor.postTitle;
+                        newObj.summary = objActor.summary;
+                        if (Reflect.has(_this.dicActor, objActor.acId)) {
+                            newObj.acName = _this.dicActor[objActor.acId].acName;
+                        }
+                        if (Reflect.has(_this.dicCat, objActor.acId)) {
+                            newObj.catName = _this.dicCat[objActor.catId].catName;
+                        }
+                        _this.listPost.push(newObj);
+                    }
+                    console.log(_this.listPost);
+                }
+            }
         }, function (error) {
             console.error(error);
         });
@@ -56,7 +95,7 @@ var SumaryPostComponent = (function () {
 SumaryPostComponent = __decorate([
     core_1.Component({
         selector: 'sumary-post',
-        template: "\n  <div>\nvuhoangha\n            </div>\n  ",
+        templateUrl: './app/sumary.post.html',
         styles: ['h4 {color:blue;}']
     }),
     __metadata("design:paramtypes", [request_1.DataProvider])

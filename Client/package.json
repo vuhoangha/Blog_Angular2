@@ -1,12 +1,17 @@
 {
   "name": "angular-quickstart",
   "version": "1.0.0",
+  "description": "",
+  "main": "systemjs.config.js",
   "scripts": {
     "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
     "lite": "lite-server",
     "tsc": "tsc",
-    "tsc:w": "tsc -w"
+    "tsc:w": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
   "licenses": [
     {
       "type": "MIT",

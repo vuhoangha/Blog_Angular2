@@ -3,17 +3,13 @@ import { DataProvider } from './server/request';
 
 @Component({
     selector: 'sumary-post',
-    template: `
-  <div>
-vuhoangha
-            </div>
-  `,
+    templateUrl: './app/sumary.post.html',
     styles: ['h4 {color:blue;}']
 })
 export class SumaryPostComponent implements OnInit {
-    public dicPost: any[];
-    public dicCat: any[];
-    public dicActor: any[];
+    public listPost = [];
+    public dicCat = {};
+    public dicActor = {};
 
     constructor(private dataProvider: DataProvider) {
     }
@@ -25,13 +21,14 @@ export class SumaryPostComponent implements OnInit {
     getAllActor() {
         this.dataProvider.getAllActor().subscribe((response: any) => {
             if (response != null) {
-                const objResponse = JSON.parse(response);
-                if (Array.isArray(objResponse)) {
-                    
+                if (Array.isArray(response)) {
+                    for (let actor of response) {
+                        const objActor = JSON.parse(actor);
+                        this.dicActor[objActor.acId] = objActor;
+                    }
                 }
             }
-            this.dicActor = response;
-            console.log(response);
+            console.log(this.dicActor);
             this.getAllCategory();
         }, error => {
             console.error(error);
@@ -40,8 +37,15 @@ export class SumaryPostComponent implements OnInit {
 
     getAllCategory() {
         this.dataProvider.getAllCategory().subscribe((response: any) => {
-            this.dicCat = response;
-            console.log(response);
+            if (response != null) {
+                if (Array.isArray(response)) {
+                    for (let category of response) {
+                        const objActor = JSON.parse(category);
+                        this.dicCat[objActor.catId] = objActor;
+                    }
+                }
+            }
+            console.log(this.dicCat);
             this.getAllPost();
         }, error => {
             console.error(error);
@@ -50,8 +54,37 @@ export class SumaryPostComponent implements OnInit {
 
     getAllPost() {
         this.dataProvider.getAllPost().subscribe((response: any) => {
-            this.dicPost = response;
-            console.log(response);
+            if (response != null) {
+                console.log(response);
+                if (Array.isArray(response)) {
+                    for (let post of response) {
+                        console.log(post);
+                        const objActor = JSON.parse(post);
+                        console.log(objActor);
+                        var newObj: {
+                            postTitle: String,
+                            summary: String,
+                            acName: String,
+                            catName: String
+                        } = {
+                                postTitle: '',
+                                summary: '',
+                                acName: '',
+                                catName: ''
+                            };
+                        newObj.postTitle = objActor.postTitle;
+                        newObj.summary = objActor.summary;
+                        if (Reflect.has(this.dicActor, objActor.acId)) {
+                            newObj.acName = this.dicActor[objActor.acId].acName;
+                        }
+                        if (Reflect.has(this.dicCat, objActor.acId)) {
+                            newObj.catName = this.dicCat[objActor.catId].catName;
+                        }
+                        this.listPost.push(newObj);
+                    }
+                    console.log(this.listPost);
+                }
+            }
         }, error => {
             console.error(error);
         });
